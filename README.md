@@ -13,9 +13,9 @@ oracle is available.
 
 More info in our paper,
 
-> [SparseMAP: Differentiable Sparse Structured Inference]().
+> [SparseMAP: Differentiable Sparse Structured Inference](https://arxiv.org/abs/1802.04223).
 > Vlad Niculae, Andre F.T. Martins, Mathieu Blondel, Claire Cardie.
-> In: Proc. of ICML, 2018.
+> In: Proc. of ICML, 2018. (Camera ready version coming soon.)
 
 
 ## Current state of the codebase
@@ -31,8 +31,8 @@ Dynet custom layers, as well as the SparseMAP loss, are on the way.
 
 Requirements: numpy, scipy, Cython, pytorch=0.2, and ad3 >= 2.2
 
-1. Set the `AD3_DIR` environment variable to point to the [AD3] source
-   directory.
+1. Set the `AD3_DIR` environment variable to point to the
+   [AD3](https://github.com/andre-martins/ad3) source directory.
 
 2. Inside the `python` dir, run  `python setup.py build_ext --inplace`.
 
