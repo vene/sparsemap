@@ -15,8 +15,7 @@ More info in our paper,
 
 > [SparseMAP: Differentiable Sparse Structured Inference](https://arxiv.org/abs/1802.04223).
 > Vlad Niculae, Andre F.T. Martins, Mathieu Blondel, Claire Cardie.
-> In: Proc. of ICML, 2018. (Camera ready version coming soon.)
-
+> In: Proc. of ICML, 2018.
 
 ## Current state of the codebase
 
