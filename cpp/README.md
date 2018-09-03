@@ -1,13 +1,14 @@
-#SparseMAP for dynet
+# SparseMAP for dynet
 
 This is an implementation of *Latent Dependency TreeLSTMs* for classification,
 NLI and reverse dictionary. For conceptual details, see our paper
 
 > Towards Dynamic Computation Graphs via Sparse Latent Structure
-> Vlad Niculae, André F. T. Martins, Claire Cardie
-> EMNLP 2018.
+> Vlad Niculae, André F.T. Martins, Claire Cardie
+> In: Proc. of EMNLP, 2018.
 
-Coming soon: dynet modules for the SparseMAP loss and SparseMAP structured attention.
+Coming soon to this folder: dynet modules for the SparseMAP loss and SparseMAP
+structured attention.
 
 ## Build & Run
 
