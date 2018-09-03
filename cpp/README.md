@@ -15,9 +15,9 @@ structured attention.
 ## Build & Run
 
 **Requirements:**
-[AD3](https://github.com/andre-martins/ad3),
-[dynet](https://github.com/clab/dynet) (tested with version
-[2.0.2](https://github.com/clab/dynet/releases/tag/2.0.2)),
+[AD3](https://github.com/andre-martins/ad3) v2.2,
+[dynet](https://github.com/clab/dynet) (tested with 
+[v2.0.2](https://github.com/clab/dynet/releases/tag/2.0.2)),
 [Eigen](http://eigen.tuxfamily.org/) (as required by dynet).
 
 **Optional:** MKL, CUDA (via dynet).
@@ -25,7 +25,7 @@ structured attention.
 **Environment setup:** point `AD3_DIR`, `DYNET_DIR` and `EIGEN_DIR` to the
 corresponding source folders. By default, set to `~/code/{ad3|dynet|eigen}`.
 
-**Compiling dynet:**. Make sure to compile dynet such that `libdynet.so` is in
+**Compiling dynet:** Make sure to compile dynet such that `libdynet.so` is in
 `DYNET_DIR/build/dynet` (for CPU support), or `DYNET_DIR/build-cuda/dynet` if
 using CUDA. For instructions on building dynet, see [their
 documentation](https://dynet.readthedocs.io/en/latest/install.html). 
