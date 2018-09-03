@@ -5,7 +5,7 @@ NLI and reverse dictionary. For conceptual details, see our paper
 
 > Towards Dynamic Computation Graphs via Sparse Latent Structure
 > Vlad Niculae, André F.T. Martins, Claire Cardie
-> In: Proc. of EMNLP, 2018.
+> In: Proc. of EMNLP, 2018. (preprint coming soon.)
 
 Coming soon to this folder: dynet modules for the SparseMAP loss and SparseMAP
 structured attention.
@@ -58,3 +58,11 @@ cd dyncg
 make sentclf-cpu
 ./sentclf-cpu --dynet-seed 42 --dynet-autobatch 1 --dataset subj --strategy latent
 ```
+
+# Data
+
+Preprocessed data can be downloaded
+[here](https://www.dropbox.com/s/1chr6ur2swrfypv/niculae18-sparsemap-cg-data.tar.xz?dl=0).
+This archive contains a `data` folder that should be placed in the `dyncg` folder. 
+Scripts used to recreate the sentence classification data are provided in
+`dyncg/data/sentclf` (in this repository).

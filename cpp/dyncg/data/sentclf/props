@@ -1,0 +1,6 @@
+annotators = tokenize,ssplit,pos,depparse
+outputFormat = conllu
+tokenize.whitespace=true
+tokenize.keepeol=true
+ssplit.newlineIsSentenceBreak=always
+ssplit.eolonly=true
