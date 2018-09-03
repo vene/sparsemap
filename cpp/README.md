@@ -1,5 +1,7 @@
 # SparseMAP for dynet
 
+![SparseMAP cartoon](sparsemap-cg.png?raw=true "SparseMAP for Dynamic Computation Graphs")
+
 This is an implementation of *Latent Dependency TreeLSTMs* for classification,
 NLI and reverse dictionary. For conceptual details, see our paper
 
@@ -59,7 +61,7 @@ make sentclf-cpu
 ./sentclf-cpu --dynet-seed 42 --dynet-autobatch 1 --dataset subj --strategy latent
 ```
 
-# Data
+## Data
 
 Preprocessed data can be downloaded
 [here](https://www.dropbox.com/s/1chr6ur2swrfypv/niculae18-sparsemap-cg-data.tar.xz?dl=0).
