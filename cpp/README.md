@@ -5,9 +5,10 @@
 This is an implementation of *Latent Dependency TreeLSTMs* for classification,
 NLI and reverse dictionary. For conceptual details, see our paper
 
-> Towards Dynamic Computation Graphs via Sparse Latent Structure
-> Vlad Niculae, André F.T. Martins, Claire Cardie
-> In: Proc. of EMNLP, 2018. (preprint coming soon.)
+> [Towards Dynamic Computation Graphs via Sparse Latent
+> Structure.](https://arxiv.org/abs/1809.00653)
+> Vlad Niculae, André F.T. Martins, Claire Cardie.
+> In: Proc. of EMNLP, 2018.
 
 Coming soon to this folder: dynet modules for the SparseMAP loss and SparseMAP
 structured attention.

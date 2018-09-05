@@ -21,8 +21,9 @@ SparseMAP may be used to dynamically infer the computation graph structure,
 marginalizing over a sparse distribution over all possible structures. Navigate 
 to the `cpp` folder for an implementation, and see our paper,
 
-> Towards Dynamic Computation Graphs via Sparse Latent Structure
-> Vlad Niculae, André F.T. Martins, Claire Cardie
+> [Towards Dynamic Computation Graphs via Sparse Latent
+> Structure.](https://arxiv.org/abs/1809.00653)
+> Vlad Niculae, André F.T. Martins, Claire Cardie.
 > In: Proc. of EMNLP, 2018.
 
 ## Current state of the codebase
