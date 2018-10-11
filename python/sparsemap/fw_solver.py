@@ -171,7 +171,7 @@ class SparseMAPFW(object):
 
             # compute step size by line search
             gamma = np.sum(-g_u * d_u) + np.sum(-g_v * d_v)
-            gamma /= np.sum(d_u ** 2) + np.sum(d_v ** 2)
+            gamma /= np.sum(d_u ** 2)
             gamma = max(0, min(gamma, max_step))
 
             # update convex combinaton coefficients
@@ -299,17 +299,17 @@ def test_pairwise_factor(variant):
 
 
 @pytest.mark.parametrize('variant', ('vanilla', 'pairwise', 'away-step'))
-@pytest.mark.parametrize('d', (1, 4, 20))
-def test_xor(variant, d):
+@pytest.mark.parametrize('k', (1, 4, 20))
+def test_xor(variant, k):
     class XORFactor(object):
         """A one-of-K factor"""
 
-        def __init__(self, d):
-            self.d = d
+        def __init__(self, k):
+            self.k = k
 
         def vertex(self, y):
             # y is an integer between 0 and k-1
-            u = np.zeros(d)
+            u = np.zeros(k)
             u[y] = 1
             v = np.array(())
 
@@ -333,14 +333,14 @@ def test_xor(variant, d):
             vv = np.array(())
             return uu, vv
 
-    xor = XORFactor(d)
+    xor = XORFactor(k)
     fw = SparseMAPFW(xor, max_iter=10000, tol=1e-12, variant=variant)
 
-    params = [np.zeros(d), np.ones(d), np.full(d, -1)]
+    params = [np.zeros(k), np.ones(k), np.full(k, -1)]
 
     rng = np.random.RandomState(0)
     for _ in range(20):
-        eta_u = rng.randn(d)
+        eta_u = rng.randn(k)
         params.append(eta_u)
 
     for eta_u in params:
