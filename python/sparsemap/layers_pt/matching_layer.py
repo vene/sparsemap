@@ -1,5 +1,3 @@
-# Segmental Semi-markov layer
-
 from ad3 import PFactorGraph
 
 import torch
