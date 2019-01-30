@@ -16,7 +16,7 @@ if not ad3_dir:
 ext_args = dict(
     # below is a hack so we can include ./ad3 as well as ../ad3
     libraries=['ad3'],
-    extra_compile_args=["-std=c++11"],
+    extra_compile_args=["-std=c++11", "-Wno-sign-compare"],
     language="c++")
 
 
@@ -34,10 +34,12 @@ setup(name="sparsemap",
               **ext_args),
           Extension(
               "sparsemap._factors",
-              ["sparsemap/_factors.pyx",
-               "../src/lapjv/lapjv.cpp",
-               os.path.join(ad3_dir, 'examples', 'cpp', 'parsing', 'FactorTree.cpp')
-               ],
+              [
+                  "sparsemap/_factors.pyx",
+                   "../src/lap/lapjv.cpp",
+                   "../src/lap/lapmod.cpp",
+                   os.path.join(ad3_dir, 'examples', 'cpp', 'parsing', 'FactorTree.cpp')
+              ],
               include_dirs=["../src", ad3_dir, os.path.join(ad3_dir, 'python'),
                             numpy.get_include()],
               library_dirs=[os.path.join(ad3_dir, 'ad3')],

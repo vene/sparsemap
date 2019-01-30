@@ -7,7 +7,7 @@
 
 #include <ad3/GenericFactor.h>
 
-#include "lapjv/lapjv.h"
+#include "lap/lapjv.h"
 
 using AD3::GenericFactor;
 using AD3::Configuration;
