@@ -1,41 +1,36 @@
 from ad3 import PFactorGraph
 
 import torch
-from torch.autograd import Variable, Function
+from torch.autograd import Function
 
-from .base import _BaseSparseMarginals
+from .base import _SparseMAP, _BaseSparseMAP
 from .._factors import PFactorMatching
 
 
-class MatchingSparseMarginals(_BaseSparseMarginals):
-
-    def build_factor(self):
-        match = PFactorMatching()
-        match.initialize(self.n_rows, self.n_cols)
-        return match
+class Matching(_BaseSparseMAP):
 
     def forward(self, unaries):
         self.n_rows, self.n_cols = unaries.size()
-        u = super().forward(unaries.view(-1))
-        return u.view_as(unaries)
 
-    def backward(self, dy):
-        dy = dy.contiguous().view(-1)
-        da = super().backward(dy)
-        return da.view(self.n_rows, self.n_cols)
+        match = PFactorMatching()
+        match.initialize(self.n_rows, self.n_cols)
+
+        u = self.sparsemap(unaries.view(-1), match)
+
+        return u.view_as(unaries)
 
 
 if __name__ == '__main__':
 
     n_rows = 5
     n_cols = 3
-    scores = torch.randn(n_rows, n_cols)
-    scores = Variable(scores, requires_grad=True)
+    scores = torch.randn(n_rows, n_cols, dtype=torch.double, requires_grad=True)
 
-    matcher = MatchingSparseMarginals()
+    matcher = Matching(max_iter=1000)
     matching = matcher(scores)
 
-    print(matching)
-    matching.sum().backward()
+    print(torch.autograd.grad(matching[0, 0], scores, retain_graph=True))
+    print(torch.autograd.grad(matching[0, 0], scores))
 
-    print("dpost_dunary", scores.grad)
+    from torch.autograd import gradcheck
+    print(gradcheck(matcher, scores, eps=1e-4, atol=1e-3))

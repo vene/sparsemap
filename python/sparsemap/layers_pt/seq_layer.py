@@ -3,27 +3,23 @@ from ad3 import PFactorGraph
 from ad3.extensions import PFactorSequence
 
 import torch
-from torch.autograd import Variable, Function
-from torch import nn
 
-from .base import _BaseSparseMarginalsAdditionals
+from .base import _BaseSparseMAP
 from .._factors import PFactorSequenceDistance
 
 
-class StationarySequencePotentials(nn.Module):
+class StationarySequencePotentials(torch.nn.Module):
     def forward(self, transition, n_variables, start=None, end=None):
         n_states, n_states_ = transition.size()
         assert n_states == n_states_
 
         if start is None:
-            start = Variable(transition.data.new(n_states))
-            start.data.zero_()
+            start = transition.zero_(n_states)
         else:
             assert start.dim() == 1 and start.size()[0] == n_states
 
         if end is None:
-            end = Variable(transition.data.new(n_states))
-            end.data.zero_()
+            end = transition.zero_(n_states)
         else:
             assert end.dim() == 1 and end.size()[0] == n_states
 
@@ -32,7 +28,7 @@ class StationarySequencePotentials(nn.Module):
                           end])
 
 
-class SequenceSparseMarginals(_BaseSparseMarginalsAdditionals):
+class Sequence(_BaseSparseMAP):
 
     def forward(self, unaries, additionals):
         """Returns a weighted sum of the most likely posterior assignments.
@@ -57,30 +53,23 @@ class SequenceSparseMarginals(_BaseSparseMarginalsAdditionals):
         """
 
         self.n_variables, self.n_states = unaries.size()
-        u = super().forward(unaries.view(-1), additionals)
-        return u.view_as(unaries)
-
-    def backward(self, dy):
-        dy = dy.contiguous().view(-1)
-        da, dadd = super().backward(dy)
-        return da.view(self.n_variables, self.n_states), dadd
-
-    def build_factor(self):
         seq = PFactorSequence()
         seq.initialize([self.n_states] * self.n_variables)
-        return seq
+        u = self.sparsemap(unaries.view(-1), seq, additionals)
+        return u.view_as(unaries)
 
 
-class SequenceDistanceSparseMarginals(SequenceSparseMarginals):
-    def __init__(self, bandwidth, max_iter=10, verbose=False):
+class SequenceDistance(Sequence):
+    def __init__(self, bandwidth, max_iter=20, verbose=False):
         self.bandwidth = bandwidth
-        self.max_iter = max_iter
-        self.verbose = verbose
+        super(SequenceDistance, self).__init__(max_iter, verbose)
 
-    def build_factor(self):
+    def forward(self, unaries, additionals):
+        self.n_variables, self.n_states = unaries.size()
         seq = PFactorSequenceDistance()
         seq.initialize(self.n_variables, self.n_states, self.bandwidth)
-        return seq
+        u = self.sparsemap(unaries.view(-1), seq, additionals)
+        return u.view_as(unaries)
 
 
 if __name__ == '__main__':
@@ -89,13 +78,13 @@ if __name__ == '__main__':
     n_states = 3
     torch.manual_seed(12)
 
-    unary = Variable(torch.randn(n_variables, n_states), requires_grad=True)
-    start = Variable(torch.randn(n_states), requires_grad=True)
-    end = Variable(torch.randn(n_states), requires_grad=True)
-    transition = Variable(torch.randn(n_states, n_states), requires_grad=True)
+    unary = torch.randn(n_variables, n_states, requires_grad=True)
+    start = torch.randn(n_states, requires_grad=True)
+    end = torch.randn(n_states, requires_grad=True)
+    transition = torch.randn(n_states, n_states, requires_grad=True)
 
     stationary_seq = StationarySequencePotentials()
-    seq_marginals = SequenceSparseMarginals()
+    seq_marginals = Sequence()
 
     additionals = stationary_seq(transition,
                                  n_variables,
@@ -104,7 +93,7 @@ if __name__ == '__main__':
     posterior = seq_marginals(unary, additionals)
 
     print(posterior)
-    posterior.sum().backward()
+    posterior[0, 0].backward()
 
     print("dpost_dunary", unary.grad)
     print("dstart", start.grad)
@@ -114,10 +103,10 @@ if __name__ == '__main__':
     print("With distance-based parametrization")
 
     bw = 3
-    dist_additional = Variable(torch.randn(1 + 4 * bw), requires_grad=True)
-    seq_dist_marg = SequenceDistanceSparseMarginals(bw)
+    dist_additional = torch.randn(1 + 4 * bw, requires_grad=True)
+    seq_dist_marg = SequenceDistance(bw)
     posterior = seq_dist_marg(unary, dist_additional)
     print(posterior)
-    ((posterior - 0.5)**2).sum().backward()
+    posterior[0, 0].backward()
     print("dpost_dunary", unary.grad)
     print("dpost_dadd", dist_additional.grad)
