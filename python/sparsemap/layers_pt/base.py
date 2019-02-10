@@ -4,7 +4,23 @@ import torch
 from torch.autograd import Variable, Function
 
 from .. import sparsemap
-from ..utils import S_from_Ainv
+
+def Z_from_inv(inv):
+    """
+
+    active set maintains the inverse :
+
+    inv = [0, 1.T; 1, MtM] ^ -1
+
+    we recover Z = (MtM)^{-1} by Sherman-Morrison-Woodbury
+    """
+
+    Z = inv[1:, 1:]
+    k = inv[0, 0]
+    b = inv[0, 1:].unsqueeze(0)
+
+    Z -= (1 / k) * (b * b.t())
+    return Z
 
 
 class _BaseSparseMarginals(Function):
@@ -33,20 +49,20 @@ class _BaseSparseMarginals(Function):
 
     def _d_vbar(self, M, dy):
 
-        Ainv = torch.from_numpy(self.status['inverse_A'])
-        S = S_from_Ainv(Ainv)
+        inv = torch.from_numpy(self.status['inverse_A'])
+        Z = Z_from_inv(inv)
 
         if M.is_cuda:
-            S = S.cuda()
+            Z = Z.cuda()
         # B = S11t / 1S1t
         # dvbar = (I - B) S M dy
 
         # we first compute S M dy
-        first_term = S @ (M @ dy)
+        first_term = Z @ (M @ dy)
         # then, BSMt dy = B * first_term. Optimized:
         # 1S1t = S.sum()
         # S11tx = (S1) (1t * x)
-        second_term = (first_term.sum() * S.sum(0)) / S.sum()
+        second_term = (first_term.sum() * Z.sum(0)) / Z.sum()
         d_vbar = first_term - second_term
         return d_vbar
 
