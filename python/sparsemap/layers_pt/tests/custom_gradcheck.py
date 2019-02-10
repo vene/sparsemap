@@ -1,4 +1,9 @@
-"""relaxed reentrancy check"""
+"""relaxed reentrancy check.
+
+Based on https://github.com/pytorch/pytorch/blob/v1.0.1/torch/autograd/gradcheck.py
+
+By the pytorch authors, released under the same license.
+"""
 
 import torch
 from torch._six import container_abcs
