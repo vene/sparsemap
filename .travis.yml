@@ -13,7 +13,7 @@ matrix:
 install:
   - wget https://github.com/andre-martins/AD3/archive/2.2.1.tar.gz
   - tar zxvf 2.2.1.tar.gz
-  - pip install pytest numpy ad3=2.2.1 cython
+  - pip install pytest numpy ad3==2.2.1 cython
   - pip install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
   - AD3_DIR=AD3-2.2.1/ python setup.py bdist_wheel
   - pip install --pre --no-index --find-links dist/ sparsemap
