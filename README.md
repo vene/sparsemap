@@ -2,6 +2,8 @@
 
 ![SparseMAP cartoon](sparsemap.png?raw=true "SparseMAP cartoon")
 
+[![Build Status](https://travis-ci.org/vene/sparsemap.svg?branch=master)](https://travis-ci.org/vene/sparsemap)<Paste>
+
 SparseMAP is a new method for **sparse structured inference,**
 able to automatically select only a few global structures:
 it is  situated between MAP inference, which picks a single structure, 
