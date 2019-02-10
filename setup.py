@@ -8,7 +8,7 @@ from Cython.Build import cythonize
 
 AD3_DIR = os.environ.get('AD3_DIR')
 if not AD3_DIR:
-    print("Warning: please set the AD3_DIR environment variable to point"
+    print("Warning: please set the AD3_DIR environment variable to point "
           "to the path where you have downloaded the AD3 library.")
     exit(1)
 

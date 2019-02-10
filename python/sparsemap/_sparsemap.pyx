@@ -46,7 +46,7 @@ cpdef sparsemap(PGenericFactor f,
         vector[Configuration] active_set_c
         vector[double] distribution
         vector[double] inverse_A
-        vector[double] M, Madd
+        vector[double] M,N
 
         GenericFactor* gf
 
@@ -69,8 +69,8 @@ cpdef sparsemap(PGenericFactor f,
 
     active_set_c = gf.GetQPActiveSet()
     distribution = gf.GetQPDistribution()
-    inverse_A = gf.GetQPInvA()
-    gf.GetCorrespondence(&M, &Madd)
+    inverse = gf.GetQPInvA()
+    gf.GetCorrespondence(&M, &N)
 
     n_active = active_set_c.size()
     n_add = post_additionals.size()
@@ -78,18 +78,18 @@ cpdef sparsemap(PGenericFactor f,
     post_unaries_np = asfloatvec(post_unaries.data(), n_var)
     post_additionals_np = asfloatvec(post_additionals.data(), n_add)
     distribution_np = asfloatvec(distribution.data(), n_active)
-    invA_np = asfloatarray(inverse_A.data(), 1 + n_active, 1 + n_active)
+    inv_np = asfloatarray(inverse.data(), 1 + n_active, 1 + n_active)
     M_np = asfloatarray(M.data(), n_active, n_var)
-    Madd_np = asfloatarray(Madd.data(), n_active, n_add)
+    N_np = asfloatarray(N.data(), n_active, n_add)
 
     active_set_py = [f._cast_configuration(x) for x in active_set_c]
 
     solver_data = {
         'active_set': active_set_py,
         'distribution': distribution_np,
-        'inverse_A': invA_np,
+        'inverse': inv_np,
         'M': M_np,
-        'Madd': Madd_np
+        'N': N_np
     }
 
     return post_unaries_np, post_additionals_np, solver_data
